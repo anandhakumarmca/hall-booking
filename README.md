@@ -21,3 +21,15 @@ To get started with this project, follow these steps:
 
    ```bash
    git clone https://github.com/anandhakumarmca/hall-booking.git
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd hall-booking
+   
+3. Install project dependencies:
+
+   ```bash
+   cd hall-booking
+   
+4. 
