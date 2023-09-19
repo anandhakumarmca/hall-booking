@@ -70,10 +70,10 @@ app.post("/createRoom", (req, res) => {
   const { roomName, numberOfSeats, amenities, pricePerHour } = req.body;
 
   // Input validation - Check if required fields are provided
-  if (!roomName || !numberOfSeats || !amenities || !pricePerHour) {
+  if ( !numberOfSeats || !amenities || !pricePerHour) {
     return res
       .status(400)
-      .json({ error: "Please Provide roomName, numberOfSeats, amenities, pricePerHour" });
+      .json({ error: "Please Provide numberOfSeats, amenities, pricePerHour" });
   }
 
   // Create a new room object
@@ -88,16 +88,16 @@ app.post("/createRoom", (req, res) => {
   rooms.push(room);
 
   // Update the local variable with booking details for this room
-  const booking = bookings.find((b) => b.roomId === room.id);
-  if (booking) {
-    room.bookedStatus = "Booked";
-    room.customerName = booking.customerName;
-    room.date = booking.date;
-    room.startTime = booking.startTime;
-    room.endTime = booking.endTime;
-  } else {
-    room.bookedStatus = "Available";
-  }
+    const booking = bookings.find((b) => b.roomId === room.id);
+    if (booking) {
+      room.bookedStatus = "Booked";
+      room.customerName = booking.customerName;
+      room.date = booking.date;
+      room.startTime = booking.startTime;
+      room.endTime = booking.endTime;
+    } else {
+      room.bookedStatus = "Available";
+    }
 
   res.status(201).send({ message: `Room  created successfully room name: ${room.roomName}` });
 });
