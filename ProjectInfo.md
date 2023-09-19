@@ -37,6 +37,7 @@ This API endpoint retrieves a list of all rooms with their booking status, custo
 This API endpoint retrieves a list of all customers with their booked room names, date, start time, and end time.
 
 **URL:** https://hall-booking-wl8b.onrender.com/customers/booked
+
 **Method:** GET
 
 ### Count How Many Times a Customer Has Booked
@@ -44,6 +45,7 @@ This API endpoint retrieves a list of all customers with their booked room names
 This API endpoint allows you to count how many times a specific customer has booked a room.
 
 **URL:** https://hall-booking-wl8b.onrender.com/customers/booking-count
+
 **Method:** GET
 
 ## GitHub Repository
@@ -56,6 +58,6 @@ This API endpoint allows you to count how many times a specific customer has boo
 
 ## Last Committed Hash ID
 
-- **Hash ID:** 6b4f520a57552ad8fd55aa87eb2e7f6f4cff454b
+- **Hash ID:** af79462bd2fff530c061519e1f91827177230395
 
 ----------------------------------------------------------------------------------------------------------------------------------
