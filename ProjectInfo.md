@@ -12,14 +12,16 @@ This document provides essential information about the Hall Booking API project,
 
 This API endpoint allows you to create a new room with details such as the number of seats, amenities, and price per hour.
 
-**URL:** https://hall-booking-wl8b.onrender.com/rooms
+**URL:** https://hall-booking-wl8b.onrender.com/createRoom
+
 **Method:** POST
 
 ### Book a Room
 
 This API endpoint allows you to book a room for a specific customer with details like customer name, date, start time, end time, and room ID.
 
-**URL:** https://hall-booking-wl8b.onrender.com/bookings
+**URL:** https://hall-booking-wl8b.onrender.com/bookRoom
+
 **Method:** POST
 
 ### List All Rooms with Booked Data
@@ -27,6 +29,7 @@ This API endpoint allows you to book a room for a specific customer with details
 This API endpoint retrieves a list of all rooms with their booking status, customer names, date, start time, and end time.
 
 **URL:** https://hall-booking-wl8b.onrender.com/rooms/booked
+
 **Method:** GET
 
 ### List All Customers with Booked Data
