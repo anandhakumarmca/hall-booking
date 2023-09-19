@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 const rooms = [];
 const bookings = [];
 const customers = [];
+const customerNames = [];
 
 // Function to check if a room is available for booking on a specific date and time
 function isRoomAvailable(roomId, date, startTime, endTime) {
@@ -40,6 +41,7 @@ app.post("/rooms", (req, res) => {
     numberOfSeats,
     amenities: amenities || [],
     pricePerHour,
+    roomName: `Room ${rooms.length + 1}`,
   };
 
   rooms.push(room);
@@ -76,13 +78,15 @@ app.post("/bookings", (req, res) => {
     startTime,
     endTime,
     roomId,
+    roomName: rooms.find((room) => room.id === roomId).roomName,
   };
 
   bookings.push(booking);
 
   // Update the customer list if the customer is new
-  if (!customers.some((customer) => customer.name === customerName)) {
+  if (!customerNames.includes(customerName)) {
     customers.push({ name: customerName });
+    customerNames.push(customerName);
   }
 
   res.status(201).json(booking);
@@ -93,7 +97,7 @@ app.get("/rooms/booked", (req, res) => {
   const result = rooms.map((room) => {
     const booking = bookings.find((b) => b.roomId === room.id);
     return {
-      roomName: `Room ${room.id}`,
+      roomName: room.roomName,
       bookedStatus: booking ? "Booked" : "Available",
       customerName: booking ? booking.customerName : null,
       date: booking ? booking.date : null,
@@ -110,7 +114,7 @@ app.get("/customers/booked", (req, res) => {
     const booking = bookings.find((b) => b.customerName === customer.name);
     return {
       customerName: customer.name,
-      roomName: booking ? `Room ${booking.roomId}` : null,
+      roomName: booking ? booking.roomName : null,
       date: booking ? booking.date : null,
       startTime: booking ? booking.startTime : null,
       endTime: booking ? booking.endTime : null,
