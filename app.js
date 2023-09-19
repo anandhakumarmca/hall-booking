@@ -7,10 +7,51 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 
 // Local variables to store data
-const rooms = [];
-const bookings = [];
-const customers = [];
-const customerNames = [];
+const rooms = [
+  {
+    id: 1,
+    roomName: "Room 1",
+    numberOfSeats: 50,
+    amenities: ["Projector", "Whiteboard"],
+    pricePerHour: 100,
+  },
+  {
+    id: 2,
+    roomName: "Room 2",
+    numberOfSeats: 25,
+    amenities: ["Blackboard"],
+    pricePerHour: 50,
+  },
+];
+
+const bookings = [
+  {
+    id: 1,
+    roomName: "Room 1",
+    customerName: "Anandh",
+    date: "2023-09-14",
+    startTime: "09:00 AM",
+    endTime: "11:00 AM",
+  },
+  {
+    id: 2,
+    roomName: "Room 2",
+    customerName: "Arun",
+    date: "2023-09-15",
+    startTime: "10:00 AM",
+    endTime: "12:00 PM",
+  },
+];
+
+const customers = [
+  {
+    name: "Anandh",
+  },
+  {
+    name: "Arun",
+  },
+];
+const customerNames = ["Anandh","Arun"];
 
 // Function to check if a room is available for booking on a specific date and time
 function isRoomAvailable(roomId, date, startTime, endTime) {
@@ -24,33 +65,45 @@ function isRoomAvailable(roomId, date, startTime, endTime) {
   );
 }
 
-// Create a Room
-app.post("/rooms", (req, res) => {
-  const { numberOfSeats, amenities, pricePerHour } = req.body;
+//1. Room Creation
+app.post("/createRoom", (req, res) => {
+  const { roomName, numberOfSeats, amenities, pricePerHour } = req.body;
 
   // Input validation - Check if required fields are provided
-  if (!numberOfSeats || !pricePerHour) {
+  if (!roomName || !numberOfSeats || !amenities || !pricePerHour) {
     return res
       .status(400)
-      .json({ error: "Please provide numberOfSeats and pricePerHour." });
+      .json({ error: "Please Provide roomName, numberOfSeats, amenities, pricePerHour" });
   }
 
   // Create a new room object
   const room = {
     id: rooms.length + 1,
+    roomName: `Room ${rooms.length + 1}`,
     numberOfSeats,
     amenities: amenities || [],
     pricePerHour,
-    roomName: `Room ${rooms.length + 1}`,
   };
 
   rooms.push(room);
 
-  res.status(201).json(room);
+  // Update the local variable with booking details for this room
+  const booking = bookings.find((b) => b.roomId === room.id);
+  if (booking) {
+    room.bookedStatus = "Booked";
+    room.customerName = booking.customerName;
+    room.date = booking.date;
+    room.startTime = booking.startTime;
+    room.endTime = booking.endTime;
+  } else {
+    room.bookedStatus = "Available";
+  }
+
+  res.status(201).send({ message: `Room  created successfully room name: ${room.roomName}` });
 });
 
-// Book a Room
-app.post("/bookings", (req, res) => {
+// 2. Room Booking
+app.post("/bookRoom", (req, res) => {
   const { customerName, date, startTime, endTime, roomId } = req.body;
 
   // Input validation - Check if required fields are provided
@@ -92,7 +145,7 @@ app.post("/bookings", (req, res) => {
   res.status(201).json(booking);
 });
 
-// List all Rooms with Booked Data
+//3. List all Rooms with Booked Data
 app.get("/rooms/booked", (req, res) => {
   const result = rooms.map((room) => {
     const booking = bookings.find((b) => b.roomId === room.id);
@@ -108,7 +161,7 @@ app.get("/rooms/booked", (req, res) => {
   res.json(result);
 });
 
-// List all Customers with Booked Data
+//4. List all Customers with Booked Data
 app.get("/customers/booked", (req, res) => {
   const result = customers.map((customer) => {
     const booking = bookings.find((b) => b.customerName === customer.name);
@@ -123,7 +176,7 @@ app.get("/customers/booked", (req, res) => {
   res.json(result);
 });
 
-// Count How Many Times a Customer Has Booked a Room
+//5. Count How Many Times a Customer Has Booked a Room
 app.get("/customers/booking-count", (req, res) => {
   const { customerName } = req.query;
   const customerBookings = bookings.filter(
